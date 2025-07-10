@@ -310,7 +310,7 @@ const UserEditModal = ({
         
         <form onSubmit={handleSubmit} className="modal-form">
           <div className="form-group">
-            <label>Email (Read Only):</label>
+            <label>Email:</label>
             <input
               type="email"
               value={formData.email}
@@ -320,7 +320,7 @@ const UserEditModal = ({
           </div>
 
           <div className="form-group">
-            <label>Name (Read Only):</label>
+            <label>Name:</label>
             <input
               type="text"
               value={formData.name}
