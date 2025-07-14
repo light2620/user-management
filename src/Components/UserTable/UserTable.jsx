@@ -12,7 +12,7 @@ const UserTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+console.log(users)
   // API endpoints
   const API_BASE = 'https://roundrobin.luminlending.com/api';
 
@@ -172,6 +172,7 @@ const UserTable = () => {
               <th>States</th>
               <th>Location</th>
               <th>Lead Vendors</th>
+              <th>Lead Count</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -200,6 +201,7 @@ const UserTable = () => {
                     ))}
                   </div>
                 </td>
+                <td>{user.current_lead_count}</td>
                 <td>
                   <button
                     className="edit-btn"
