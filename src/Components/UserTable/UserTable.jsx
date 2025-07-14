@@ -16,6 +16,20 @@ console.log(users)
   // API endpoints
   const API_BASE = 'https://roundrobin.luminlending.com/api';
 
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
+  // Calculate pagination values
+  const totalPages = Math.ceil(users.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentUsers = users.slice(startIndex, endIndex);
+
+  // Handle page change
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
   // Fetch users from API
   const fetchUsers = async () => {
     try {
@@ -160,15 +174,21 @@ console.log(users)
     return <div className="user-table-container">Error: {error}</div>;
   }
 
-  return (
+   return (
     <div className="user-table-container">
       <h1>User Management</h1>
+      
+      <div className="table-info">
+        <p>Showing {startIndex + 1} to {Math.min(endIndex, users.length)} of {users.length} users</p>
+      </div>
+
       <div className="table-wrapper">
         <table className="user-table">
           <thead>
             <tr>
-              <th>Email</th>
+              <th>S.No.</th>
               <th>Name</th>
+              <th>Email</th>
               <th>Cap Value</th>
               <th>States</th>
               <th>Location</th>
@@ -178,25 +198,26 @@ console.log(users)
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {currentUsers.map((user, index) => (
               <tr key={user.ghl_user_id}>
-                <td>{user.email}</td>
+                <td>{startIndex + index + 1}</td>
                 <td>{user.name}</td>
+                <td>{user.email}</td>
                 <td>{user.cap_value}</td>
                 <td>
                   <div className="states-list">
-                    {user.states.map((state, index) => (
-                      <span key={index} className="state-tag">
+                    {user.states.map((state, stateIndex) => (
+                      <span key={stateIndex} className="state-tag">
                         {state}
                       </span>
                     ))}
                   </div>
                 </td>
-                <td>{ user?.location?.location_name ? user?.location?.location_name : ""}</td>
+                <td>{user?.location?.location_name ? user?.location?.location_name : ""}</td>
                 <td>
                   <div className="states-list">
-                    {(user.selected_vendors || []).map((vendor, index) => (
-                      <span key={index} className="state-tag">
+                    {(user.selected_vendors || []).map((vendor, vendorIndex) => (
+                      <span key={vendorIndex} className="state-tag">
                         {vendor}
                       </span>
                     ))}
@@ -216,6 +237,37 @@ console.log(users)
           </tbody>
         </table>
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+  <div className="pagination-wrapper" style={{ display: "flex", gap: "8px", marginTop: "20px", justifyContent: "center", alignItems: "center" }}>
+    <button
+      onClick={() => handlePageChange(currentPage - 1)}
+      disabled={currentPage === 1}
+      className="pagination-button"
+    >
+      Prev
+    </button>
+
+    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+      <button
+        key={page}
+        onClick={() => handlePageChange(page)}
+        className={`pagination-button ${currentPage === page ? 'active' : ''}`}
+      >
+        {page}
+      </button>
+    ))}
+
+    <button
+      onClick={() => handlePageChange(currentPage + 1)}
+      disabled={currentPage === totalPages}
+      className="pagination-button"
+    >
+      Next
+    </button>
+  </div>
+)}
 
       {isModalOpen && editingUser && (
         <UserEditModal
