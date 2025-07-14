@@ -55,7 +55,7 @@ const UserTable = () => {
     try {
       const response = await fetch(`${API_BASE}/locations/`);
       const data = await response.json();
-      
+      console.log(data)
       if (data.success) {
         setLocations(data.locations);
       } else {
@@ -125,7 +125,7 @@ const UserTable = () => {
         body: JSON.stringify({
           cap_value: updatedUser.cap_value,
           states: updatedUser.states,
-          location_id: updatedUser.location.location_id,
+          location_id: updatedUser.location.location_id || "",
           selected_vendors: updatedUser.selected_vendors || []
         }),
       });
