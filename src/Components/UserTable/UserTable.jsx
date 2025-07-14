@@ -126,7 +126,8 @@ console.log(users)
           cap_value: updatedUser.cap_value,
           states: updatedUser.states,
           location_id: updatedUser.location.location_id || "",
-          selected_vendors: updatedUser.selected_vendors || []
+          selected_vendors: updatedUser.selected_vendors || [],
+           reset_lead_count: updatedUser.reset_lead_count || false
         }),
       });
 
