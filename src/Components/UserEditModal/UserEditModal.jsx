@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import './style.css';
 
@@ -74,20 +75,15 @@ const UserEditModal = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Validate form
+    // Validate form - only validate cap_value if it has errors
     const newErrors = {};
     
     if (formData.cap_value < 0) {
       newErrors.cap_value = 'Cap value must be non-negative';
     }
     
-    if (formData.states.length === 0) {
-      newErrors.states = 'Please select at least one state';
-    }
-    
-    if (!formData.location.location_id) {
-      newErrors.location = 'Please select a location';
-    }
+    // Remove previous validation requirements for states and location
+    // Users can now update individual fields without requiring all fields
 
     setErrors(newErrors);
 
@@ -134,7 +130,7 @@ const UserEditModal = ({
           </div>
 
           <div className="form-group">
-            <label htmlFor="capValue">Cap Value: *</label>
+            <label htmlFor="capValue">Cap Value:</label>
             <input
               id="capValue"
               type="text"
@@ -149,7 +145,7 @@ const UserEditModal = ({
           </div>
 
           <div className="form-group">
-            <label>States: *</label>
+            <label>States:</label>
             <div className="states-container">
               <div className="selected-states">
                 {formData.states.length > 0 ? (
@@ -185,18 +181,14 @@ const UserEditModal = ({
                 </div>
               </div>
             </div>
-            {errors.states && (
-              <span className="error-message">{errors.states}</span>
-            )}
           </div>
 
           <div className="form-group">
-            <label htmlFor="location">Location: *</label>
+            <label htmlFor="location">Location:</label>
             <select
               id="location"
               value={formData.location.location_id}
               onChange={handleLocationChange}
-              className={errors.location ? 'error' : ''}
             >
               <option value="">Select a location</option>
               {locations.map((location) => (
@@ -205,9 +197,6 @@ const UserEditModal = ({
                 </option>
               ))}
             </select>
-            {errors.location && (
-              <span className="error-message">{errors.location}</span>
-            )}
           </div>
 
           <div className="form-group">
@@ -264,7 +253,6 @@ const UserEditModal = ({
 };
 
 export default UserEditModal;
-
 
 
 
