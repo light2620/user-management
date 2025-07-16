@@ -194,6 +194,7 @@ console.log(users)
               <th>Location</th>
               <th>Lead Vendors</th>
               <th>Lead Count</th>
+              <th>Total Leads </th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -224,6 +225,7 @@ console.log(users)
                   </div>
                 </td>
                 <td>{user.current_lead_count}</td>
+                <td>{user.total_lead_count}</td>
                 <td>
                   <button
                     className="edit-btn"

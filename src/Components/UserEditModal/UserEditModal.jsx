@@ -15,7 +15,7 @@ const UserEditModal = ({
     ...user,
     location: user.location || { location_id: '', location_name: '' },
     selected_vendors: user.selected_vendors || [],
-    reset_lead_count: false
+    // reset_lead_count: false
   });
   const [errors, setErrors] = useState({});
 
@@ -24,7 +24,7 @@ const UserEditModal = ({
       ...user,
       location: user.location || { location_id: '', location_name: '' },
       selected_vendors: user.selected_vendors || [],
-       reset_lead_count: false
+      //  reset_lead_count: false
     });
   }, [user]);
 
@@ -100,13 +100,13 @@ const UserEditModal = ({
     }
   };
 
-const handleResetLeadCount = () => {
-    setFormData(prev => ({
-      ...prev,
-      current_lead_count: 0,
-      reset_lead_count: true
-    }));
-  };
+// const handleResetLeadCount = () => {
+//     setFormData(prev => ({
+//       ...prev,
+//       current_lead_count: 0,
+//       reset_lead_count: true
+//     }));
+//   };
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
@@ -250,10 +250,10 @@ const handleResetLeadCount = () => {
             </div>
           </div>
 
-          <div className='form-group'>
+          {/* <div className='form-group'>
                 <label>Total Lead Count: {formData.current_lead_count}</label>
                 {formData.current_lead_count > 0 && <button className='reset-lead-count-btn' onClick={handleResetLeadCount}>Reset Lead Count</button>}   
-          </div>
+          </div> */}
 
           <div className="modal-actions">
             <button type="button" onClick={onClose} className="cancel-btn">
