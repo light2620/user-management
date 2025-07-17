@@ -13,9 +13,17 @@ const UserTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Lead Table popup states
   const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false);
   const [leads, setLeads] = useState([]);
   const [leadUserName, setLeadUserName] = useState("");
+  const [leadCurrentPage, setLeadCurrentPage] = useState(1);
+  const leadsPerPage = 10;
+  const totalLeadPages = Math.ceil(leads.length / leadsPerPage);
+  const leadStartIndex = (leadCurrentPage - 1) * leadsPerPage;
+   const leadEndIndex = leadStartIndex + leadsPerPage;
+const currentLeads = leads.slice(leadStartIndex, leadEndIndex);
 console.log(users)
   // API endpoints
   const API_BASE = 'https://roundrobin.luminlending.com/api';
@@ -245,8 +253,8 @@ const handleViewLeads = async (user) => {
                     ))}
                   </div>
                 </td>
-                <td>{user.current_lead_count}</td>
-                <td onClick={() => handleViewLeads(user)}>{user.total_lead_count}</td>
+                <td >{user.current_lead_count}</td>
+                <td  style={{cursor: "pointer"}} onClick={() => handleViewLeads(user)}>{user.total_lead_count}</td>
                 <td>
                   <button
                     className="edit-btn"
@@ -306,30 +314,64 @@ const handleViewLeads = async (user) => {
   {isLeadsModalOpen && (
   <div className="modal-overlay">
     <div className="modal-content">
-      <h2>Leads for {leadUserName}</h2>
-      {leads.length === 0 ? (
-        <p>No leads available.</p>
-      ) : (
-        <table className="leads-table">
-          <thead>
-            <tr>
-              <th>Lead Name</th>
-              <th>Lead Email</th>
-              <th>Lead Phone</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leads.map((lead, idx) => (
-              <tr key={idx}>
-                <td>{lead.lead_name}</td>
-                <td>{lead.lead_email}</td>
-                <td>{lead.lead_phone}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
-      <button onClick={() => setIsLeadsModalOpen(false)}>
+      <h2>Leads Assigned to {leadUserName}</h2>
+     {leads.length === 0 ? (
+  <p>No leads available.</p>
+) : (
+  <>
+    <table className="leads-table">
+      <thead>
+        <tr>
+          <th>Lead Name</th>
+          <th>Lead Email</th>
+          <th>Lead Phone</th>
+        </tr>
+      </thead>
+      <tbody>
+        {currentLeads.map((lead, idx) => (
+          <tr key={idx}>
+            <td>{lead.lead_name}</td>
+            <td>{lead.lead_email}</td>
+            <td>{lead.lead_phone}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+
+    {/* Pagination Controls for Leads */}
+    {totalLeadPages > 1 && (
+      <div className="pagination-wrapper" style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
+        <button
+          onClick={() => setLeadCurrentPage(leadCurrentPage - 1)}
+          disabled={leadCurrentPage === 1}
+          className="pagination-button"
+        >
+          Prev
+        </button>
+
+        {Array.from({ length: totalLeadPages }, (_, i) => i + 1).map((page) => (
+          <button
+            key={page}
+            onClick={() => setLeadCurrentPage(page)}
+            className={`pagination-button ${leadCurrentPage === page ? 'active' : ''}`}
+          >
+            {page}
+          </button>
+        ))}
+
+        <button
+          onClick={() => setLeadCurrentPage(leadCurrentPage + 1)}
+          disabled={leadCurrentPage === totalLeadPages}
+          className="pagination-button"
+        >
+          Next
+        </button>
+      </div>
+    )}
+  </>
+)}
+
+      <button className="close-lead-popup" onClick={() => setIsLeadsModalOpen(false)}>
         <IoMdClose size={30} />
       </button>
     </div>
