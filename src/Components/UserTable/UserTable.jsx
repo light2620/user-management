@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import UserEditModal from "../UserEditModal/UserEditModal"
+import { IoMdClose } from "react-icons/io";
 import './style.css';
 
 const UserTable = () => {
@@ -12,6 +13,9 @@ const UserTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false);
+  const [leads, setLeads] = useState([]);
+  const [leadUserName, setLeadUserName] = useState("");
 console.log(users)
   // API endpoints
   const API_BASE = 'https://roundrobin.luminlending.com/api';
@@ -165,7 +169,23 @@ console.log(users)
       alert('Error updating user');
     }
   };
+const handleViewLeads = async (user) => {
+  try {
+    const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/leads/`);
+    const data = await response.json();
 
+    if (data.success) {
+      setLeads(data.leads);
+      setLeadUserName(data.user_name);
+      setIsLeadsModalOpen(true);
+    } else {
+      alert("Failed to fetch leads.");
+    }
+  } catch (err) {
+    console.error("Error fetching leads:", err);
+    alert("Something went wrong while fetching leads.");
+  }
+};
   if (loading) {
     return <div className="user-table-container">Loading...</div>;
   }
@@ -173,6 +193,7 @@ console.log(users)
   if (error) {
     return <div className="user-table-container">Error: {error}</div>;
   }
+  
 
    return (
     <div className="user-table-container">
@@ -225,7 +246,7 @@ console.log(users)
                   </div>
                 </td>
                 <td>{user.current_lead_count}</td>
-                <td>{user.total_lead_count}</td>
+                <td onClick={() => handleViewLeads(user)}>{user.total_lead_count}</td>
                 <td>
                   <button
                     className="edit-btn"
@@ -281,6 +302,40 @@ console.log(users)
           onClose={handleCloseModal}
         />
       )}
+
+  {isLeadsModalOpen && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <h2>Leads for {leadUserName}</h2>
+      {leads.length === 0 ? (
+        <p>No leads available.</p>
+      ) : (
+        <table className="leads-table">
+          <thead>
+            <tr>
+              <th>Lead Name</th>
+              <th>Lead Email</th>
+              <th>Lead Phone</th>
+            </tr>
+          </thead>
+          <tbody>
+            {leads.map((lead, idx) => (
+              <tr key={idx}>
+                <td>{lead.lead_name}</td>
+                <td>{lead.lead_email}</td>
+                <td>{lead.lead_phone}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <button onClick={() => setIsLeadsModalOpen(false)}>
+        <IoMdClose size={30} />
+      </button>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
