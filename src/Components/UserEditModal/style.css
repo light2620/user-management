@@ -253,6 +253,26 @@
   border-radius: 5px;
 
 }
+
+.lead-vendor-label{
+   display: flex;
+   gap: 20px;
+   align-items: center;
+   justify-content: space-between;
+   margin-bottom: 10px;
+}
+.lead-vendor-label button{
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    background-color: #333;
+    padding: 5px 10px;
+    border-radius: 4px;
+    color: white;
+}
+.lead-vendor-label button:hover{
+ background-color: #333333a2;
+}
 /* Responsive design */
 @media (max-width: 480px) {
   .modal-overlay {

@@ -99,6 +99,15 @@ const UserEditModal = ({
       onClose();
     }
   };
+  const handleSelectAllVendors = (e) => {
+    e.preventDefault();  // 🚫 prevent form submit
+    e.stopPropagation();
+  setFormData(prev => ({
+    ...prev,
+    selected_vendors:
+      prev.selected_vendors.length === vendors.length ? [] : [...vendors]
+  }));
+};
 
 // const handleResetLeadCount = () => {
 //     setFormData(prev => ({
@@ -210,7 +219,11 @@ const UserEditModal = ({
           </div>
 
           <div className="form-group">
-            <label>Lead Vendors:</label>
+            <div className="lead-vendor-label">
+                <label>Lead Vendors: </label>
+                <button onClick={handleSelectAllVendors}>{formData.selected_vendors.length === vendors.length ? 'Deselect All' : 'Select All'}</button>
+            </div>
+           
             <div className="states-container">
               <div className="selected-states">
                 {formData.selected_vendors.length > 0 ? (
@@ -249,6 +262,8 @@ const UserEditModal = ({
       
             </div>
           </div>
+
+
 
           {/* <div className='form-group'>
                 <label>Total Lead Count: {formData.current_lead_count}</label>
