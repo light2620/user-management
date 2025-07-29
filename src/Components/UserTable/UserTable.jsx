@@ -46,7 +46,7 @@ const currentLeads = leads.slice(leadStartIndex, leadEndIndex);
     try {
       const response = await fetch(`${API_BASE}/users/`);
       const data = await response.json();
-      
+      console.log(data.users)
       if (data.success) {
         setUsers(data.users);
       } else {
@@ -196,6 +196,22 @@ const handleViewLeads = async (user) => {
   }
 };
 
+const handleYTDLeads = async(user) =>{ 
+  try {
+    const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/leads/year/`);
+    
+    const data = await response.json();
+    if (data.success) {
+      setLeads(data.leads);
+      setLeadUserName(data.user_name);
+      setIsLeadsModalOpen(true);
+    } 
+  } catch (err) {
+    console.error("Error fetching leads:", err);
+    alert("Something went wrong while fetching leads.");
+  }
+}
+
 const handleDelete = async (user) => {
   try {
     const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/delete/`, {
@@ -272,7 +288,7 @@ const handleDelete = async (user) => {
                 </td>
                 <td >{user.current_lead_count}</td>
                 <td  style={{cursor: "pointer"}} onClick={() => handleViewLeads(user)}>{user.total_lead_count}</td>
-                <td  style={{cursor: "pointer"}}>{user.year_total}</td>
+                <td  style={{cursor: "pointer"}} onClick={() => handleYTDLeads(user)}>{user.year_total}</td>
                 <td>
                   <div className="actions-btn-container">
                   <button
