@@ -194,6 +194,21 @@ const handleViewLeads = async (user) => {
     alert("Something went wrong while fetching leads.");
   }
 };
+
+const handleDelete = async (user) => {
+  try {
+    const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/delete/`, {
+      method: 'DELETE',
+    });
+
+    const data = await response.json();
+    console.log('User deleted:', data);
+    fetchUsers()
+  } catch (err) {
+    console.error('Error deleting user:', err);
+  }
+};
+
   if (loading) {
     return <div className="user-table-container">Loading...</div>;
   }
@@ -222,7 +237,7 @@ const handleViewLeads = async (user) => {
               <th>States</th>
               <th>Location</th>
               <th>Lead Vendors</th>
-              <th>Lead Count</th>
+              <th>Daily Lead Count</th>
               <th>Total Leads </th>
               <th>Actions</th>
             </tr>
@@ -256,12 +271,20 @@ const handleViewLeads = async (user) => {
                 <td >{user.current_lead_count}</td>
                 <td  style={{cursor: "pointer"}} onClick={() => handleViewLeads(user)}>{user.total_lead_count}</td>
                 <td>
+                  <div className="actions-btn-container">
                   <button
                     className="edit-btn"
                     onClick={() => handleEditClick(user)}
                   >
                     Edit
                   </button>
+                  <button 
+                  className='delete-btn'
+                  onClick={() => handleDelete(user)}
+                  >
+                    Delete
+                  </button>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -64,7 +64,7 @@
   font-weight: 500;
 }
 
-.edit-btn {
+.edit-btn, .delete-btn {
   background-color: #2196f3;
   color: white;
   border: none;
@@ -75,12 +75,20 @@
   font-weight: 500;
   transition: background-color 0.2s ease;
 }
+.delete-btn{
+  background-color: #f11237;
+
+}
+
+.delete-btn:hover{
+  background-color: #cc0526;
+}
 
 .edit-btn:hover {
   background-color: #1976d2;
 }
 
-.edit-btn:active {
+.edit-btn:active , .delete-btn:active{
   transform: translateY(1px);
 }
 
@@ -204,6 +212,12 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.actions-btn-container{
+  display: flex;
+  gap:10px;
+}
+
 
 /* Responsive design */
 @media (max-width: 768px) {
