@@ -201,6 +201,7 @@ const handleYTDLeads = async(user) =>{
     const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/leads/year/`);
     
     const data = await response.json();
+    console.log(data);
     if (data.success) {
       setLeads(data.leads);
       setLeadUserName(data.user_name);
@@ -402,7 +403,8 @@ const handleDelete = async (user) => {
         ))}
 
         <button
-          onClick={() => setLeadCurrentPage(leadCurrentPage + 1)}
+          onClick={() => {
+            setLeadCurrentPage(leadCurrentPage + 1)}}
           disabled={leadCurrentPage === totalLeadPages}
           className="pagination-button"
         >
@@ -413,7 +415,12 @@ const handleDelete = async (user) => {
   </>
 )}
 
-      <button className="close-lead-popup" onClick={() => setIsLeadsModalOpen(false)}>
+      <button className="close-lead-popup" 
+      
+      onClick={() => {
+        setIsLeadsModalOpen(false)
+        setLeadCurrentPage(1)
+        }}>
         <IoMdClose size={30} />
       </button>
     </div>
