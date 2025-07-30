@@ -358,79 +358,82 @@ const handleDelete = async (user) => {
   <div className="modal-overlay">
     <div className="modal-content">
       <h2>Leads Assigned to {leadUserName}</h2>
-     {leads.length === 0 ? (
-  <p>No leads available.</p>
-) : (
-  <>
-<div style={{"width" : "100%" , "overflow" : 'auto', "max-height" : "70vh"}}>
-    <table className="leads-table">
-      <thead className="lead-table-header">
-        <tr>
-          <th>Lead Name</th>
-          <th>Lead Email</th>
-          <th>Lead Phone</th>
-          <th>State</th>
-          <th>Vendor</th>
-        </tr>
-      </thead>
-      <tbody>
-        {currentLeads.map((lead, idx) => (
-          <tr key={idx}>
-            <td>{lead.lead_name}</td>
-            <td>{lead.lead_email}</td>
-            <td>{lead.lead_phone}</td>
-            <td>{lead.lead_state}</td>
-            <td>{lead.lead_vendor}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-</div>
-    {/* Pagination Controls for Leads */}
-    {totalLeadPages > 1 && (
-      <div className="pagination-wrapper" style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
-        <button
-          onClick={() => setLeadCurrentPage(leadCurrentPage - 1)}
-          disabled={leadCurrentPage === 1}
-          className="pagination-button"
-        >
-          Prev
-        </button>
 
-        {Array.from({ length: totalLeadPages }, (_, i) => i + 1).map((page) => (
-          <button
-            key={page}
-            onClick={() => setLeadCurrentPage(page)}
-            className={`pagination-button ${leadCurrentPage === page ? 'active' : ''}`}
-          >
-            {page}
-          </button>
-        ))}
+      {leads.length === 0 ? (
+        <p>No leads available.</p>
+      ) : (
+        <>
+          <div className="leads-table-container">
+            <table className="leads-table">
+              <thead className="lead-table-header">
+                <tr>
+                  <th>Lead Name</th>
+                  <th>Lead Email</th>
+                  <th>Lead Phone</th>
+                  <th>State</th>
+                  <th>Vendor</th>
+                </tr>
+              </thead>
+              <tbody>
+                {currentLeads.map((lead, idx) => (
+                  <tr key={idx}>
+                    <td>{lead.lead_name}</td>
+                    <td>{lead.lead_email}</td>
+                    <td>{lead.lead_phone}</td>
+                    <td>{lead.lead_state}</td>
+                    <td>{lead.lead_vendor}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <button
-          onClick={() => {
-            setLeadCurrentPage(leadCurrentPage + 1)}}
-          disabled={leadCurrentPage === totalLeadPages}
-          className="pagination-button"
-        >
-          Next
-        </button>
-      </div>
-    )}
-  </>
-)}
+          {/* Pagination Controls */}
+          {totalLeadPages > 1 && (
+            <div className="pagination-wrapper" style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
+              <button
+                onClick={() => setLeadCurrentPage(leadCurrentPage - 1)}
+                disabled={leadCurrentPage === 1}
+                className="pagination-button"
+              >
+                Prev
+              </button>
 
-      <button className="close-lead-popup" 
-      
-      onClick={() => {
-        setIsLeadsModalOpen(false)
-        setLeadCurrentPage(1)
-        }}>
+              {Array.from({ length: totalLeadPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setLeadCurrentPage(page)}
+                  className={`pagination-button ${leadCurrentPage === page ? 'active' : ''}`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setLeadCurrentPage(leadCurrentPage + 1)}
+                disabled={leadCurrentPage === totalLeadPages}
+                className="pagination-button"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      <button
+        className="close-lead-popup"
+        onClick={() => {
+          setIsLeadsModalOpen(false);
+          setLeadCurrentPage(1);
+        }}
+      >
         <IoMdClose size={30} />
       </button>
     </div>
   </div>
 )}
+
 
     </div>
   );
