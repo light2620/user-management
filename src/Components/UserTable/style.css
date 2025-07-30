@@ -12,10 +12,11 @@
 }
 
 .table-wrapper {
-  overflow-x: auto;
+  overflow: auto;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   background: white;
+  max-height: 70vh;
 }
 
 .user-table {
@@ -182,7 +183,7 @@
   background-color: #ffffff;
 }
 
-.leads-table thead th {
+.leads-table thead th , .user-table thead th {
   position: sticky;
   top: 0;
   background: #f9fafb;
