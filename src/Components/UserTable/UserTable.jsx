@@ -362,12 +362,15 @@ const handleDelete = async (user) => {
   <p>No leads available.</p>
 ) : (
   <>
+<div style={{"width" : "100%" , "overflow" : 'auto', "max-height" : "70vh"}}>
     <table className="leads-table">
-      <thead>
+      <thead className="lead-table-header">
         <tr>
           <th>Lead Name</th>
           <th>Lead Email</th>
           <th>Lead Phone</th>
+          <th>State</th>
+          <th>Vendor</th>
         </tr>
       </thead>
       <tbody>
@@ -376,11 +379,13 @@ const handleDelete = async (user) => {
             <td>{lead.lead_name}</td>
             <td>{lead.lead_email}</td>
             <td>{lead.lead_phone}</td>
+            <td>{lead.lead_state}</td>
+            <td>{lead.lead_vendor}</td>
           </tr>
         ))}
       </tbody>
     </table>
-
+</div>
     {/* Pagination Controls for Leads */}
     {totalLeadPages > 1 && (
       <div className="pagination-wrapper" style={{ display: "flex", gap: "8px", marginTop: "16px", justifyContent: "center" }}>
