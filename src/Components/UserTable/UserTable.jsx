@@ -372,6 +372,7 @@ const handleDelete = async (user) => {
                   <th>Lead Phone</th>
                   <th>State</th>
                   <th>Vendor</th>
+                  <th>Date Received</th>
                 </tr>
               </thead>
               <tbody>
@@ -382,6 +383,7 @@ const handleDelete = async (user) => {
                     <td>{lead.lead_phone}</td>
                     <td>{lead.lead_state}</td>
                     <td>{lead.lead_vendor}</td>
+                    <td>{lead.date_received}</td>
                   </tr>
                 ))}
               </tbody>
