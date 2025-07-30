@@ -140,10 +140,10 @@
 }
 .modal-overlay {
   position: fixed;
-  top: 0;
+  /* top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 100%; */
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -158,7 +158,7 @@
   width: 90%;
   max-width: 1000px;
   max-height: 80vh;
-  overflow: hidden;
+  overflow: auto;
 }
 .leads-table-container {
   max-height: 60vh;
@@ -166,6 +166,8 @@
   border: 1px solid #e2e8f0;
   border-radius: 6px;
 }
+
+
 
 .leads-table {
   width: 100%;

@@ -119,8 +119,8 @@ const UserEditModal = ({
 
   return (
     <div className="modal-overlay" onClick={handleOverlayClick}>
-      <div className="modal-content">
-        <div className="modal-header">
+      <div className="edit-modal-content">
+        <div className="edit-modal-header">
           <h2>Edit User</h2>
           <button className="close-btn" onClick={onClose}>
             ×
