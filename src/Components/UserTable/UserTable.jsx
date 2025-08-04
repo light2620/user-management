@@ -214,6 +214,23 @@ const handleYTDLeads = async(user) =>{
   }
 }
 
+const handleDailyLeads = async(user) => {
+
+  try {
+    const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/leads/day/`);
+    
+    const data = await response.json();
+    console.log(data);
+    if (data.success) {
+      setLeads(data.leads);
+      setLeadUserName(data.user_name);
+      setIsLeadsModalOpen(true);
+    } 
+  } catch (err) {
+    console.error("Error fetching leads:", err);
+  }
+}
+
 const handleDelete = async (user) => {
   try {
     const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/delete/`, {
@@ -290,7 +307,7 @@ const handleDelete = async (user) => {
                     ))}
                   </div>
                 </td>
-                <td >{user.current_lead_count}</td>
+                <td  style={{cursor: "pointer"}} onClick={() =>  handleDailyLeads(user)}>{user.current_lead_count}</td>
                 <td  style={{cursor: "pointer"}} onClick={() => handleViewLeads(user)}>{user.total_lead_count}</td>
                 <td  style={{cursor: "pointer"}} onClick={() => handleYTDLeads(user)}>{user.year_total}</td>
                 <td>
@@ -376,6 +393,7 @@ const handleDelete = async (user) => {
                   <th>State</th>
                   <th>Vendor</th>
                   <th>Date Received</th>
+                  <th>Assigned User</th>
                 </tr>
               </thead>
               <tbody>
@@ -387,6 +405,8 @@ const handleDelete = async (user) => {
                     <td>{lead.lead_state}</td>
                     <td>{lead.lead_vendor}</td>
                     <td>{lead.date_received}</td>
+                    <td>{lead.assigned_user}</td>
+
                   </tr>
                 ))}
               </tbody>
