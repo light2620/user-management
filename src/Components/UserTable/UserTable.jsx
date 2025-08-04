@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import UserEditModal from "../UserEditModal/UserEditModal"
 import { IoMdClose } from "react-icons/io";
+import Spinner from '../../utils/Spinner';
 import './style.css';
 
 const UserTable = () => {
@@ -246,7 +247,7 @@ const handleDelete = async (user) => {
 };
 
   if (loading) {
-    return <div className="user-table-container">Loading...</div>;
+    return <div className="user-table-loading"><Spinner /></div>;
   }
 
   if (error) {
