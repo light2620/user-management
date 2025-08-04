@@ -275,7 +275,7 @@ const handleDelete = async (user) => {
               <th>States</th>
               <th>Location</th>
               <th>Lead Vendors</th>
-              <th>Daily Lead Count</th>
+              <th>Daily Leads Assigned</th>
               <th>MTD Total Leads </th>
               <th>YTD Total Leads</th>
               <th>Actions</th>
