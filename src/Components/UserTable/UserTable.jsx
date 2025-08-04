@@ -251,6 +251,7 @@ const handleDelete = async (user) => {
               <th>S.No.</th>
               <th>Name</th>
               <th>Email</th>
+              <th>Daily Quota</th>
               <th>Cap Value</th>
               <th>States</th>
               <th>Location</th>
@@ -267,6 +268,7 @@ const handleDelete = async (user) => {
                 <td>{startIndex + index + 1}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>{user.daily_quota}</td>
                 <td>{user.cap_value}</td>
                 <td>
                   <div className="states-list">
