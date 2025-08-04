@@ -152,7 +152,8 @@ const currentLeads = leads.slice(leadStartIndex, leadEndIndex);
           states: updatedUser.states,
           location_id: updatedUser.location.location_id || "",
           selected_vendors: updatedUser.selected_vendors || [],
-           reset_lead_count: updatedUser.reset_lead_count || false
+          reset_lead_count: updatedUser.reset_lead_count || false,
+          daily_quota: updatedUser.daily_quota,
         }),
       });
 

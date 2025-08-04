@@ -38,11 +38,24 @@ const UserEditModal = ({
     if (value === '' || validateCapValue(value)) {
       setFormData(prev => ({
         ...prev,
-        cap_value: value === '' ? 0 : parseInt(value, 10)
+        cap_value: value === '' ? "" : parseInt(value, 10)
       }));
       setErrors(prev => ({ ...prev, cap_value: '' }));
     } else {
       setErrors(prev => ({ ...prev, cap_value: 'Please enter a valid integer' }));
+    }
+  };
+
+  const handleDailyQuotaChange = (e) => {
+    const value = e.target.value;
+    if (value === '' || validateCapValue(value)) {
+      setFormData(prev => ({
+        ...prev,
+        daily_quota: value === '' ? "" : parseInt(value, 10)
+      }));
+      setErrors(prev => ({ ...prev, daily_quota: '' }));
+    } else {
+      setErrors(prev => ({ ...prev, daily_quota: 'Please enter a valid integer   ' }));
     }
   };
 
@@ -147,6 +160,21 @@ const UserEditModal = ({
               className="readonly-input"
             />
           </div>
+          <div className="form-group">
+  <label htmlFor="dailyQuota">Daily Quota</label>
+  <input
+    id="dailyQuota"
+    type="text"
+    value={formData.daily_quota}
+    onChange={handleDailyQuotaChange}
+    placeholder="Enter integer value"
+    className={errors.daily_quota ? 'error' : ''}
+  />
+  {errors.daily_quota && (
+    <span className="error-message">{errors.daily_quota}</span>
+  )}
+</div>
+
 
           <div className="form-group">
             <label htmlFor="capValue">Cap Value:</label>
