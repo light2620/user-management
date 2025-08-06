@@ -241,7 +241,65 @@
   gap:5px;
 }
 
+.lead-search-controls select{
+      margin-left: 8px;
+    padding: 5.3px 12px;
+    border-right: none;
+    background: #f6f4f4;
+    border-radius: 4px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+.lead-search-input{
+   border: 1px solid black;
+   border-left: none;
+    padding: 6px 12px;
+    width: 240px;
+     border-radius: 4px;
+     border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+.lead-search-input:focus {
+  outline: none;
+}
+.items-per-page-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Spacing between label and select */
+}
 
+.items-per-page-selector label {
+  font-size: 0.9em; /* Adjust as needed */
+}
+
+.items-per-page-selector select {
+  padding: 4px 8px;  /* Basic styling */
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.reset-sorting-btn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.reset-sorting-btn:hover {
+  background-color: #3e8e41;
+}
+
+.user-table th {
+  cursor: pointer; /* Add cursor pointer to th */
+}
 /* Responsive design */
 @media (max-width: 768px) {
   .user-table-container {
