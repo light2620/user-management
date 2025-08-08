@@ -50,13 +50,31 @@ const UserTable = () => {
   const sortedUsers = [...users].sort((a, b) => {
     if (!userSortColumn) return 0;
 
-    let valueA = a[userSortColumn];
-    let valueB = b[userSortColumn];
+    let valueA, valueB;
 
-    if (userSortColumn === 'daily_quota' || userSortColumn === 'total_lead_count' || userSortColumn === 'year_total') {
-      valueA = Number(valueA);
-      valueB = Number(valueB);
+    if (userSortColumn === 'states') {
+      //Sort by the number of states
+      valueA = a.states.length;
+      valueB = b.states.length;
+    } else if (userSortColumn === 'location') {
+        // Sort by location name
+        valueA = a.location?.location_name || ""; // Handle null/undefined locations
+        valueB = b.location?.location_name || "";
+
+    } else if (userSortColumn === 'selected_vendors') {
+      // Sort by the number of vendors
+      valueA = (a.selected_vendors || []).length;  // Handle null/undefined vendors
+      valueB = (b.selected_vendors || []).length;
     }
+    else if (userSortColumn === 'daily_quota' || userSortColumn === 'total_lead_count' || userSortColumn === 'year_total') {
+      valueA = Number(a[userSortColumn]);
+      valueB = Number(b[userSortColumn]);
+    }
+    else{
+       valueA = a[userSortColumn];
+       valueB = b[userSortColumn];
+    }
+
 
     if (valueA < valueB) {
       return userSortOrder === 'asc' ? -1 : 1;
@@ -428,10 +446,25 @@ const UserTable = () => {
                 {userSortColumn === 'cap_value' ? (
                   userSortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />
                 ) : <FaSort />}
-                </th>
-              <th>States</th>
-              <th>Location</th>
-              <th>Lead Vendors</th>
+              </th>
+              <th onClick={() => handleUserSort('states')}>
+                States
+                {userSortColumn === 'states' ? (
+                  userSortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />
+                ) : <FaSort />}
+              </th>
+               <th onClick={() => handleUserSort('location')}>
+                  Location
+                  {userSortColumn === 'location' ? (
+                      userSortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />
+                  ) : <FaSort />}
+              </th>
+              <th onClick={() => handleUserSort('selected_vendors')}>
+                Lead Vendors
+                {userSortColumn === 'selected_vendors' ? (
+                  userSortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />
+                ) : <FaSort />}
+              </th>
               <th onClick={() => handleUserSort('current_lead_count')}>
                 Daily Leads Assigned
                 {userSortColumn === 'current_lead_count' ? (
