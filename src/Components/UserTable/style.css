@@ -206,7 +206,11 @@
   border-bottom: 1px solid #eee;
   text-align: left;
 }
+.lead-table-header{
 
+  cursor: pointer;
+
+}
 .close-lead-popup {
   position: absolute;
   top: 16px;
