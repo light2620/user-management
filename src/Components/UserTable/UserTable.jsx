@@ -24,7 +24,9 @@ const UserTable = () => {
   const [leads, setLeads] = useState([]);
   const [leadUserName, setLeadUserName] = useState("");
   const [leadCurrentPage, setLeadCurrentPage] = useState(1);
-  const leadsPerPage = 10;
+  const leadsPerPage = 20;
+  const [userSearchType, setUserSearchType] = useState("location");
+const [userSearchQuery, setUserSearchQuery] = useState("");
 
   // Sorting State for Users
   const [userSortColumn, setUserSortColumn] = useState(null);
@@ -41,13 +43,24 @@ const UserTable = () => {
   const API_BASE = 'https://roundrobin.luminlending.com/api';
 
 
-  // Calculate pagination values for users
-  const totalPages = Math.ceil(users.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
 
+
+  const filteredUsers = users.filter(user => {
+  if (userSearchType === "location") {
+    return (user.location?.location_name || "")
+      .toLowerCase()
+      .includes(userSearchQuery.toLowerCase());
+  }
+  if (userSearchType === "loan_officer") {
+    return (
+      user.name?.toLowerCase().includes(userSearchQuery.toLowerCase()) ||
+      user.email?.toLowerCase().includes(userSearchQuery.toLowerCase())
+    );
+  }
+  return true;
+});
   // Sort users based on current sorting criteria
-  const sortedUsers = [...users].sort((a, b) => {
+  const sortedUsers = [...filteredUsers].sort((a, b) => {
     if (!userSortColumn) return 0;
 
     let valueA, valueB;
@@ -85,7 +98,11 @@ const UserTable = () => {
     return 0;
   });
 
-  const currentUsers = sortedUsers.slice(startIndex, endIndex);
+    // Calculate pagination values for users
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+const currentUsers = sortedUsers.slice(startIndex, endIndex);
 
 
     // Calculate pagination values for leads
@@ -398,7 +415,33 @@ const UserTable = () => {
       <h1>User Management</h1>
 
       <div className="table-info" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <p>Showing {startIndex + 1} to {Math.min(endIndex, users.length)} of {users.length} users</p>
+        <div style={{ display: "flex", alignItems: "center" , justifyContent: "center",gap: "16px"}}>
+<p>Showing {startIndex + 1} to {Math.min(endIndex, users.length)} of {users.length} users</p>
+
+<div className="user-search-controls" style={{ display: "flex"  }}>
+    <label style={{"margin-left": "8px"}}>
+      Search By:
+     </label>
+     <div>
+      <select value={userSearchType} onChange={(e) => setUserSearchType(e.target.value)} style={{ marginLeft: "8px" }}>
+        <option value="location">Location</option>
+        <option value="loan_officer">Loan Officer</option>
+      </select>
+
+    <input
+      type="text"
+      placeholder={`Search by ${userSearchType === "location" ? "Location" : "Loan Officer"}`}
+      value={userSearchQuery}
+      className="lead-search-input"
+      onChange={(e) => {
+        setUserSearchQuery(e.target.value);
+        setCurrentPage(1); // reset pagination
+      }}
+    />
+    </div>
+  </div>
+        </div>
+        
 
         <div className="items-per-page-selector">
           <label htmlFor="itemsPerPage">Items per page:</label>
