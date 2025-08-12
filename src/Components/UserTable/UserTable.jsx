@@ -419,9 +419,6 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
 <p>Showing {startIndex + 1} to {Math.min(endIndex, users.length)} of {users.length} users</p>
 
 <div className="user-search-controls" style={{ display: "flex"  }}>
-    <label style={{"margin-left": "8px"}}>
-      Search By:
-     </label>
      <div>
       <select value={userSearchType} onChange={(e) => setUserSearchType(e.target.value)} style={{ marginLeft: "8px" }}>
         <option value="location">Location</option>
