@@ -22,6 +22,7 @@ const UserTable = () => {
   // Lead Table popup states
   const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false);
   const [leads, setLeads] = useState([]);
+  const [leadUserId, setLeadUserId] = useState("");
   const [leadUserName, setLeadUserName] = useState("");
   const [leadCurrentPage, setLeadCurrentPage] = useState(1);
   const leadsPerPage = 20;
@@ -343,6 +344,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
       if (data.success) {
         setLeads(data.leads);
         setLeadUserName(data.user_name);
+        setLeadUserId(user.ghl_user_id);
         setIsLeadsModalOpen(true);
       } else {
         alert("Failed to fetch leads.");
@@ -362,6 +364,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
       if (data.success) {
         setLeads(data.leads);
         setLeadUserName(data.user_name);
+        setLeadUserId(user.ghl_user_id);
         setIsLeadsModalOpen(true);
       }
     } catch (err) {
@@ -371,6 +374,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
   }
 
   const handleDailyLeads = async (user) => {
+    console.log(user.ghl_user_id)
 
     try {
       const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/leads/day/`);
@@ -380,6 +384,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
       if (data.success) {
         setLeads(data.leads);
         setLeadUserName(data.user_name);
+        setLeadUserId(user.ghl_user_id);
         setIsLeadsModalOpen(true);
       }
     } catch (err) {
@@ -711,7 +716,11 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
                           <td>{lead.lead_phone}</td>
                           <td>{lead.lead_state}</td>
                           <td>{lead.lead_vendor}</td>
-                          <td>{lead.date_received}</td>
+                          <td>
+  {leadUserId === "mYvHfMR0FbOAZqw1q05Q"
+    ? lead.date_received 
+    : lead.assigned_dt}
+</td>
                           <td>{lead.assigned_user}</td>
 
                         </tr>
