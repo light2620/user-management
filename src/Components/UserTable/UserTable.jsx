@@ -44,6 +44,54 @@ const [userSearchQuery, setUserSearchQuery] = useState("");
   const API_BASE = 'https://roundrobin.luminlending.com/api';
 
 
+//   // Function to download CSV
+// const downloadLeadsCSV = () => {
+//   if (!filteredLeads.length) {
+//     alert("No leads available to download.");
+//     return;
+//   }
+
+//   // Define CSV headers
+//   const headers = [
+//     "Lead Name",
+//     "Lead Email",
+//     "Lead Phone",
+//     "State",
+//     "Vendor",
+//     "Date Received",
+//     "Assigned User",
+//   ];
+
+//   // Map leads data into rows
+//   const rows = filteredLeads.map((lead) => [
+//     lead.lead_name || "",
+//     lead.lead_email || "",
+//     lead.lead_phone || "",
+//     lead.lead_state || "",
+//     lead.lead_vendor || "",
+//     leadUserId === "mYvHfMR0FbOAZqw1q05Q" ? lead.date_received : lead.assigned_dt || "",
+//     lead.assigned_user || "",
+//   ]);
+
+//   // Combine headers + rows
+//   const csvContent =
+//     [headers, ...rows]
+//       .map((row) => row.map((value) => `"${value}"`).join(",")) // escape with quotes
+//       .join("\n");
+
+//   // Create downloadable blob
+//   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+//   const url = URL.createObjectURL(blob);
+
+//   // Create temp link & trigger download
+//   const link = document.createElement("a");
+//   link.href = url;
+//   link.setAttribute("download", `leads_${leadUserName || "data"}.csv`);
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// };
+
 
 
   const filteredUsers = users.filter(user => {
@@ -345,6 +393,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
+        
         setIsLeadsModalOpen(true);
       } else {
         alert("Failed to fetch leads.");
@@ -380,13 +429,13 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
       const response = await fetch(`${API_BASE}/users/${user.ghl_user_id}/leads/day/`);
 
       const data = await response.json();
-      console.log(data);
-      if (data.success) {
+
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
+
         setIsLeadsModalOpen(true);
-      }
+
     } catch (err) {
       console.error("Error fetching leads:", err);
     }
@@ -634,7 +683,8 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
               <p>No leads available.</p>
             ) : (
               <div className="leads-data-wrapper">
-                <div className="lead-search-controls" style={{ display: "flex", marginBottom: "16px", alignItems: "center" }}>
+                <div className="lead-search-controls" style={{ display: "flex", marginBottom: "16px", alignItems: "center",justifyContent: "space-between" }}>
+                  <div>
                   <label htmlFor='searchType' >
                     Search By:
                     <select value={searchType} onChange={(e) => setSearchType(e.target.value)} style={{ marginLeft: "8px" }}>
@@ -654,6 +704,10 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
                     }}
                     className="lead-search-input"
                   />
+                  </div>
+                   {/* <button onClick={downloadLeadsCSV} className="download-btn">
+      Download CSV
+    </button> */}
                 </div>
                 {isLeadSortingActive && (
                     <button onClick={resetLeadSorting} className="reset-sorting-btn">
