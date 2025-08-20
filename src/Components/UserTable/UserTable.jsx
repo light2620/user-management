@@ -16,7 +16,7 @@ const UserTable = () => {
   const [error, setError] = useState(null);
   const [searchType, setSearchType] = useState("lead_name");
   const [searchQuery, setSearchQuery] = useState("");
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
 
   // Lead Table popup states
@@ -501,9 +501,9 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
             value={itemsPerPage}
             onChange={handleItemsPerPageChange}
           >
-            <option value="10">10</option>
-            <option value="50">50</option>
             <option value="100">100</option>
+            <option value="150">150</option>
+            <option value="200">200</option>
           </select>
         </div>
       </div>
@@ -821,6 +821,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
               onClick={() => {
                 setIsLeadsModalOpen(false);
                 setLeadCurrentPage(1);
+                resetLeadSorting();
               }}
             >
               <IoMdClose size={30} />
