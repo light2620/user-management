@@ -23,6 +23,7 @@ const UserTable = () => {
   const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false);
   const [leads, setLeads] = useState([]);
   const [leadUserId, setLeadUserId] = useState("");
+  const [totalLeadPrice,setTotalLeadPrice] = useState("");
   const [leadUserName, setLeadUserName] = useState("");
   const [leadCurrentPage, setLeadCurrentPage] = useState(1);
   const leadsPerPage = 20;
@@ -44,53 +45,70 @@ const [userSearchQuery, setUserSearchQuery] = useState("");
   const API_BASE = 'https://roundrobin.luminlending.com/api';
 
 
-//   // Function to download CSV
-// const downloadLeadsCSV = () => {
-//   if (!filteredLeads.length) {
-//     alert("No leads available to download.");
-//     return;
-//   }
+  // Function to download CSV
+// Function to download CSV
+// Function to download CSV
+const downloadLeadsCSV = () => {
+  if (!filteredLeads.length) {
+    alert("No leads available to download.");
+    return;
+  }
 
-//   // Define CSV headers
-//   const headers = [
-//     "Lead Name",
-//     "Lead Email",
-//     "Lead Phone",
-//     "State",
-//     "Vendor",
-//     "Date Received",
-//     "Assigned User",
-//   ];
+  // CSV headers (aligned with your table order)
+  const headers = [
+    "Lead Name",
+    "Lead Email",
+    "Lead Phone",
+    "State",
+    "Vendor",
+    "Lead Price",
+    "Date Received",
+    "Assigned User",
+  ];
 
-//   // Map leads data into rows
-//   const rows = filteredLeads.map((lead) => [
-//     lead.lead_name || "",
-//     lead.lead_email || "",
-//     lead.lead_phone || "",
-//     lead.lead_state || "",
-//     lead.lead_vendor || "",
-//     leadUserId === "mYvHfMR0FbOAZqw1q05Q" ? lead.date_received : lead.assigned_dt || "",
-//     lead.assigned_user || "",
-//   ]);
+  // Map leads data into rows
+  const rows = filteredLeads.map((lead) => [
+    lead.lead_name || "",
+    lead.lead_email || "",
+    lead.lead_phone || "",
+    lead.lead_state || "",
+    lead.lead_vendor || "",
+    lead.lead_price ?? "",
+    leadUserId === "mYvHfMR0FbOAZqw1q05Q" ? (lead.date_received || "") : (lead.assigned_dt || ""),
+    lead.assigned_user || "",
+  ]);
 
-//   // Combine headers + rows
-//   const csvContent =
-//     [headers, ...rows]
-//       .map((row) => row.map((value) => `"${value}"`).join(",")) // escape with quotes
-//       .join("\n");
+  // Add footer with totalLeadPrice from state
+  const footer = [
+    [], // blank row
+    ["TOTAL LEAD PRICE", "", "", "", "", totalLeadPrice, "", ""],
+  ];
 
-//   // Create downloadable blob
-//   const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-//   const url = URL.createObjectURL(blob);
+  const csvArray = [headers, ...rows, ...footer];
 
-//   // Create temp link & trigger download
-//   const link = document.createElement("a");
-//   link.href = url;
-//   link.setAttribute("download", `leads_${leadUserName || "data"}.csv`);
-//   document.body.appendChild(link);
-//   link.click();
-//   document.body.removeChild(link);
-// };
+  const csvContent = csvArray
+    .map((row) =>
+      row
+        .map((value) => `"${String(value).replace(/"/g, '""')}"`)
+        .join(",")
+    )
+    .join("\n");
+
+  // Add BOM for Excel compatibility
+  const blob = new Blob(["\uFEFF" + csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", `leads_${leadUserName || "data"}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
+
 
 
 
@@ -393,7 +411,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
-        
+        setTotalLeadPrice(data.price_sum);
         setIsLeadsModalOpen(true);
       } else {
         alert("Failed to fetch leads.");
@@ -414,6 +432,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
+        setTotalLeadPrice(data.price_sum);
         setIsLeadsModalOpen(true);
       }
     } catch (err) {
@@ -433,6 +452,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
+        setTotalLeadPrice(data.price_sum);
 
         setIsLeadsModalOpen(true);
 
@@ -704,11 +724,15 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
                     }}
                     className="lead-search-input"
                   />
+                
                   </div>
-                   {/* <button onClick={downloadLeadsCSV} className="download-btn">
+                   <button onClick={downloadLeadsCSV} className="download-btn">
       Download CSV
-    </button> */}
+    </button>
                 </div>
+                  <div>
+                   <p>Total Lead Price: <span style={{fontWeight: "bold"}}>{totalLeadPrice}</span></p> 
+                  </div>
                 {isLeadSortingActive && (
                     <button onClick={resetLeadSorting} className="reset-sorting-btn">
                       Reset Sorting
@@ -748,6 +772,12 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
                                 leadSortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />
                             ) : <FaSort />}
                         </th>
+                         <th onClick={() => handleLeadSort('lead_price')}>
+          Lead Price
+          {leadSortColumn === 'lead_price' ? (
+            leadSortOrder === 'asc' ? <FaSortUp /> : <FaSortDown />
+          ) : <FaSort />}
+        </th>
                         <th onClick={() => handleLeadSort('date_received')}>
                             Date Received
                             {leadSortColumn === 'date_received' ? (
@@ -770,6 +800,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
                           <td>{lead.lead_phone}</td>
                           <td>{lead.lead_state}</td>
                           <td>{lead.lead_vendor}</td>
+                          <td>{lead.lead_price || 0}</td>
                           <td>
   {leadUserId === "mYvHfMR0FbOAZqw1q05Q"
     ? lead.date_received 
