@@ -23,7 +23,6 @@ const UserTable = () => {
   const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false);
   const [leads, setLeads] = useState([]);
   const [leadUserId, setLeadUserId] = useState("");
-  const [totalLeadPrice,setTotalLeadPrice] = useState("");
   const [leadUserName, setLeadUserName] = useState("");
   const [leadCurrentPage, setLeadCurrentPage] = useState(1);
   const leadsPerPage = 20;
@@ -47,14 +46,12 @@ const [userSearchQuery, setUserSearchQuery] = useState("");
 
   // Function to download CSV
 // Function to download CSV
-// Function to download CSV
 const downloadLeadsCSV = () => {
   if (!filteredLeads.length) {
     alert("No leads available to download.");
     return;
   }
 
-  // CSV headers (aligned with your table order)
   const headers = [
     "Lead Name",
     "Lead Email",
@@ -66,7 +63,6 @@ const downloadLeadsCSV = () => {
     "Assigned User",
   ];
 
-  // Map leads data into rows
   const rows = filteredLeads.map((lead) => [
     lead.lead_name || "",
     lead.lead_email || "",
@@ -78,26 +74,21 @@ const downloadLeadsCSV = () => {
     lead.assigned_user || "",
   ]);
 
-  // Add footer with totalLeadPrice from state
+  // footer with filtered total
   const footer = [
-    [], // blank row
-    ["TOTAL LEAD PRICE", "", "", "", "", totalLeadPrice, "", ""],
+    [],
+    ["TOTAL LEAD PRICE ", "", "", "", "", totalFilteredLeadPrice, "", ""],
   ];
 
   const csvArray = [headers, ...rows, ...footer];
 
   const csvContent = csvArray
     .map((row) =>
-      row
-        .map((value) => `"${String(value).replace(/"/g, '""')}"`)
-        .join(",")
+      row.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(",")
     )
     .join("\n");
 
-  // Add BOM for Excel compatibility
-  const blob = new Blob(["\uFEFF" + csvContent], {
-    type: "text/csv;charset=utf-8;",
-  });
+  const blob = new Blob(["\uFEFF" + csvContent], { type: "text/csv;charset=utf-8;" });
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");
@@ -107,7 +98,6 @@ const downloadLeadsCSV = () => {
   link.click();
   document.body.removeChild(link);
 };
-
 
 
 
@@ -181,6 +171,12 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
    return valueToSearch.includes(searchQuery.toLowerCase());
  });
 
+ // Total derived from CURRENT filtered leads (reactive to search/filter)
+const totalFilteredLeadPrice = filteredLeads.reduce(
+  (sum, l) => sum + (Number(l?.lead_price) || 0),
+  0
+);
+
  const totalFilteredLeadPages = Math.ceil(filteredLeads.length / leadsPerPage);
  const filteredStartIndex = (leadCurrentPage - 1) * leadsPerPage;
  const filteredEndIndex = filteredStartIndex + leadsPerPage;
@@ -206,6 +202,8 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
     }
     return 0;
   });
+
+  
  const currentLeads = sortedLeads.slice(filteredStartIndex, filteredEndIndex);
 
 
@@ -411,7 +409,6 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
-        setTotalLeadPrice(data.price_sum);
         setIsLeadsModalOpen(true);
       } else {
         alert("Failed to fetch leads.");
@@ -432,7 +429,6 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
-        setTotalLeadPrice(data.price_sum);
         setIsLeadsModalOpen(true);
       }
     } catch (err) {
@@ -452,8 +448,6 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
         setLeads(data.leads);
         setLeadUserName(data.user_name);
         setLeadUserId(user.ghl_user_id);
-        setTotalLeadPrice(data.price_sum);
-
         setIsLeadsModalOpen(true);
 
     } catch (err) {
@@ -731,7 +725,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
     </button>
                 </div>
                   <div>
-                   <p>Total Lead Price: <span style={{fontWeight: "bold"}}>{totalLeadPrice}</span></p> 
+                   <p>Total Lead Price: <span style={{fontWeight: "bold"}}>{ totalFilteredLeadPrice}</span></p> 
                   </div>
                 {isLeadSortingActive && (
                     <button onClick={resetLeadSorting} className="reset-sorting-btn">
@@ -853,6 +847,7 @@ const currentUsers = sortedUsers.slice(startIndex, endIndex);
                 setIsLeadsModalOpen(false);
                 setLeadCurrentPage(1);
                 resetLeadSorting();
+                setSearchQuery("")
               }}
             >
               <IoMdClose size={30} />
