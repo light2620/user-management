@@ -324,10 +324,27 @@
 .download-btn:hover{
   transition:  .4s;
 }
+
+.onBoardLoaction{
+  padding: 8px 12px;
+  border-radius:4px;
+   border: none;
+   margin-left: 20px;
+   cursor: pointer;
+   background-color: #242424;
+   color:white;
+}
+.onBoardLoaction:hover{
+  opacity: .8;
+
+}
 /* Responsive design */
 @media (max-width: 768px) {
   .user-table-container {
     padding: 10px;
+  }
+  .onBoardLoaction{
+    margin-top: 20px;
   }
   
   .user-table th,

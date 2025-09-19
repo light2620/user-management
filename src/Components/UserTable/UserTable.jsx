@@ -469,6 +469,30 @@ const totalFilteredLeadPrice = filteredLeads.reduce(
     }
   };
 
+    const handleOnboardAllLocations = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/onboard-all-locations`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert("All locations onboarded successfully!");
+        // Optionally refresh users or locations if API affects them
+        fetchLocations();
+      } else {
+        alert(data.message || "Failed to onboard locations.");
+      }
+    } catch (error) {
+      console.error("Error onboarding all locations:", error);
+      alert("Something went wrong while onboarding locations.");
+    }
+  };
+
   if (loading) {
     return <div className="user-table-loading"><Spinner /></div>;
   }
@@ -503,6 +527,9 @@ const totalFilteredLeadPrice = filteredLeads.reduce(
         setCurrentPage(1); // reset pagination
       }}
     />
+    <button className="onBoardLoaction" onClick={handleOnboardAllLocations}>
+  Onboard All Locations
+</button>
     </div>
   </div>
         </div>
