@@ -18,6 +18,7 @@ const UserTable = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [itemsPerPage, setItemsPerPage] = useState(100);
   const [currentPage, setCurrentPage] = useState(1);
+  const [onBoardLoading,setOnBoardLoading] = useState(false)
 
   // Lead Table popup states
   const [isLeadsModalOpen, setIsLeadsModalOpen] = useState(false);
@@ -470,26 +471,23 @@ const totalFilteredLeadPrice = filteredLeads.reduce(
   };
 
     const handleOnboardAllLocations = async () => {
+
     try {
+      setOnBoardLoading(true)
       const response = await fetch(`${API_BASE}/onboard-all-locations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
-
+      alert("Onboarded Location Successfully")
+   
       const data = await response.json();
-
-      if (data.success) {
-        alert("All locations onboarded successfully!");
-        // Optionally refresh users or locations if API affects them
-        fetchLocations();
-      } else {
-        alert(data.message || "Failed to onboard locations.");
-      }
+      console.log(data)
     } catch (error) {
       console.error("Error onboarding all locations:", error);
-      alert("Something went wrong while onboarding locations.");
+    }finally{
+      setOnBoardLoading(false)
     }
   };
 
@@ -528,7 +526,7 @@ const totalFilteredLeadPrice = filteredLeads.reduce(
       }}
     />
     <button className="onBoardLoaction" onClick={handleOnboardAllLocations}>
-  Onboard All Locations
+ { onBoardLoading ? "processing" : "Onboard All Locations"}
 </button>
     </div>
   </div>
